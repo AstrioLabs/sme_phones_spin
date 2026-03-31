@@ -12,7 +12,6 @@
     .app{width:360px;max-width:100%;}
     .title{text-align:center;margin-bottom:24px;letter-spacing:2px;}
 
-
     .spin-area{
       background:#151c4b;border-radius:24px;padding:24px 16px 32px;
       display:flex;flex-direction:column;align-items:center;
@@ -52,13 +51,11 @@
     }
     .phone-img.active{opacity:1;filter:none;}
 
-
     .spin-btn{
       border:none;border-radius:999px;padding:10px 28px;
       background:#28e08c;color:#000;font-weight:600;cursor:pointer;
     }
     .spin-btn:disabled{opacity:.6;cursor:default;}
-
 
     /* CARDS AFTER SPIN */
     .card{
@@ -76,8 +73,12 @@
       background:#28e08c;color:#000;font-weight:600;cursor:pointer;margin-top:4px;
     }
     .result-img{
-      width:140px;height:220px;margin-bottom:14px;border-radius:20px;
+      width:140px;height:220px;border-radius:20px;
       background-size:cover;background-position:center;
+
+      /* FIX: center image */
+      display:block;
+      margin:0 auto 16px;
     }
     .hidden{display:none;}
 
@@ -85,6 +86,70 @@
     #countdown{
       color:#19e26b;
       font-weight:600;
+    }
+
+    /* MOBILE SCALING */
+    @media (max-width: 480px) {
+      .app {
+        width: 100%;
+        padding: 16px;
+      }
+
+      .title {
+        font-size: 28px;
+        margin-bottom: 28px;
+      }
+
+      .spin-area {
+        padding: 32px 20px 40px;
+      }
+
+      .track {
+        height: 240px;
+      }
+
+      .slot-frame {
+        width: 200px;
+        height: 240px;
+        border-width: 5px;
+      }
+
+      .phone-img {
+        width: 150px;
+        height: 240px;
+      }
+
+      .spin-btn {
+        padding: 14px 36px;
+        font-size: 16px;
+      }
+
+      .card {
+        padding: 32px 24px 36px;
+      }
+
+      .card h2 {
+        font-size: 22px;
+      }
+
+      .card p {
+        font-size: 16px;
+      }
+
+      .card input {
+        padding: 14px;
+        font-size: 16px;
+      }
+
+      .primary-btn {
+        padding: 14px 32px;
+        font-size: 16px;
+      }
+
+      .result-img {
+        width: 180px;
+        height: 260px;
+      }
     }
   </style>
 </head>
@@ -97,20 +162,13 @@
         <div class="slot-frame"></div>
 
         <div id="phones-strip" class="phones-strip">
-          <div class="phone-img"
-               style="background-image:url('15_blue.webp')"></div>
-          <div class="phone-img"
-               style="background-image:url('16_black.png')"></div>
-          <div class="phone-img"
-               style="background-image:url('17_blue.png')"></div>
-          <div class="phone-img"
-               style="background-image:url('17_orange.png')"></div>
-          <div class="phone-img"
-               style="background-image:url('16_pink.png')"></div>
-          <div class="phone-img"
-               style="background-image:url('17_white.png')"></div>
-          <div class="phone-img"
-               style="background-image:url('air.webp')"></div>
+          <div class="phone-img" style="background-image:url('15_blue.webp')"></div>
+          <div class="phone-img" style="background-image:url('16_black.png')"></div>
+          <div class="phone-img" style="background-image:url('17_blue.png')"></div>
+          <div class="phone-img" style="background-image:url('17_orange.png')"></div>
+          <div class="phone-img" style="background-image:url('16_pink.png')"></div>
+          <div class="phone-img" style="background-image:url('17_white.png')"></div>
+          <div class="phone-img" style="background-image:url('air.webp')"></div>
         </div>
       </div>
 
@@ -126,7 +184,6 @@
       </button>
     </div>
 
-    <!-- Form -->
     <div id="card-form" class="card hidden">
       <h2>Enter your details</h2>
       <input id="name" type="text" placeholder="Your name" />
@@ -134,7 +191,6 @@
       <button id="submit-btn" class="primary-btn">OK</button>
     </div>
 
-    <!-- Countdown -->
     <div id="card-countdown" class="card hidden">
       <h2>You may receive your iPhone soon!</h2>
       <p id="countdown"></p>
@@ -163,7 +219,6 @@
     let lastInFrameIndex = 0;
 
     function highlightCurrent(){
-      const trackRect = document.querySelector(".track").getBoundingClientRect();
       const frameRect = document.querySelector(".slot-frame").getBoundingClientRect();
       const frameCenter = frameRect.left + frameRect.width/2;
 
@@ -183,29 +238,25 @@
       spinBtn.disabled = true;
       spinBtn.textContent = "SPINNING...";
 
-      const step = 8;     // pixels per tick
+      const step = 8;
       spinInterval = setInterval(() => {
         offset -= step;
         strip.style.transform = `translate(${offset}px, -50%)`;
         highlightCurrent();
       }, 40);
 
-      // stop after 3 seconds
       setTimeout(() => {
         clearInterval(spinInterval);
 
-        // final small move so we stop exactly with some phone in frame
         offset -= 12;
         strip.style.transform = `translate(${offset}px, -50%)`;
-        highlightCurrent();                      // lastInFrameIndex is winner
+        highlightCurrent();
 
         const winner = phoneEls[lastInFrameIndex];
         const bgImg = getComputedStyle(winner).backgroundImage;
         resultImgBox.style.backgroundImage = bgImg;
 
-        // hide title after spin
-        mainTitle.style.display = "none";   // common pattern to hide elements[web:28]
-
+        mainTitle.style.display = "none";
         spinArea.remove();
         resultCard.classList.remove("hidden");
       }, 3000);
