@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>iPhone Spin</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+    }
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#02052b;
+      color:#fff;
+      padding:16px;
+    }
+
+    .app{
+      width:100%;
+      max-width:420px;
+    }
+
+    .title{
+      text-align:center;
+      margin-bottom:24px;
+      letter-spacing:2px;
+    }
+
+    .spin-area{
+      background:#151c4b;
+      border-radius:24px;
+      padding:24px 16px 32px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .track{
+      position:relative;
+      width:100%;
+      height:190px;
+      overflow:hidden;
+      margin-bottom:18px;
+    }
+
+    .slot-frame{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:160px;
+      height:190px;
+      transform:translate(-50%,-50%);
+      border:4px solid #19e26b;
+      border-radius:20px;
+      z-index:2;
+      pointer-events:none;
+      box-shadow:0 0 18px rgba(25,226,107,0.3);
+    }
+
+    .phones-strip{
+      position:absolute;
+      left:0;
+      top:50%;
+      display:flex;
+      align-items:center;
+      gap:24px;
+      transform:translateY(-50%);
+      will-change:transform;
+    }
+
+    .phone-img{
+      width:120px;
+      height:190px;
+      border-radius:18px;
+      background-size:cover;
+      background-position:center;
+      flex-shrink:0;
+      opacity:.35;
+      filter:grayscale(50%);
+      transition:opacity .12s,filter .12s,transform .12s;
+    }
+    .phone-img.active{
+      opacity:1;
+      filter:none;
+      transform:scale(1.02);
+      box-shadow:0 0 16px rgba(25,226,107,0.45);
+    }
+
+    .spin-btn{
+      border:none;
+      border-radius:999px;
+      padding:12px 30px;
+      background:#28e08c;
+      color:#000;
+      font-weight:600;
+      cursor:pointer;
+      font-size:16px;
+      width:100%;
+      max-width:240px;
+    }
+    .spin-btn:disabled{
+      opacity:.6;
+      cursor:default;
+    }
+
+    .card{
+      margin-top:20px;
+      padding:26px 20px 30px;
+      border-radius:24px;
+      background:#151c4b;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .card h2{
+      margin-bottom:10px;
+    }
+    .card p{
+      margin-bottom:18px;
+    }
+
+    .card input{
+      width:100%;
+      max-width:320px;
+      margin:10px 0;
+      padding:14px 16px;
+      border-radius:12px;
+      border:none;
+      outline:none;
+      font-size:16px;
+    }
+
+    .primary-btn{
+      border:none;
+      border-radius:999px;
+      padding:13px 28px;
+      background:#28e08c;
+      color:#000;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:6px;
+      font-size:16px;
+      width:100%;
+      max-width:260px;
+    }
+
+    .result-img{
+      width:160px;
+      height:240px;
+      margin-bottom:14px;
+      border-radius:20px;
+      background-size:cover;
+      background-position:center;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    #countdown{
+      color:#19e26b;
+      font-weight:600;
+      font-size:18px;
+      margin-top:16px;
+    }
+
+    @media (max-width:360px){
+      .phone-img{
+        width:100px;
+        height:170px;
+      }
+      .slot-frame{
+        width:140px;
+        height:170px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1 class="title" id="main-title">IPHONE SPIN</h1>
+
+    <div id="spin-area" class="spin-area">
+      <div class="track">
+        <div class="slot-frame"></div>
+
+        <div id="phones-strip" class="phones-strip">
+          <!-- base sequence: 1..7 -->
+          <div class="phone-img" data-id="1"
+               style="background-image:url('15_blue.webp')"></div>
+          <div class="phone-img" data-id="2"
+               style="background-image:url('16_black.png')"></div>
+          <div class="phone-img" data-id="3"
+               style="background-image:url('17_blue.png')"></div>
+          <div class="phone-img" data-id="4"
+               style="background-image:url('17_orange.png')"></div>
+          <div class="phone-img" data-id="5"
+               style="background-image:url('16_pink.png')"></div>
+          <div class="phone-img" data-id="6"
+               style="background-image:url('17_white.png')"></div>
+          <div class="phone-img" data-id="7"
+               style="background-image:url('air.webp')"></div>
+          <!-- duplicate sequence once for smooth looping[web:103][web:175] -->
+          <div class="phone-img" data-id="1"
+               style="background-image:url('15_blue.webp')"></div>
+          <div class="phone-img" data-id="2"
+               style="background-image:url('16_black.png')"></div>
+          <div class="phone-img" data-id="3"
+               style="background-image:url('17_blue.png')"></div>
+          <div class="phone-img" data-id="4"
+               style="background-image:url('17_orange.png')"></div>
+          <div class="phone-img" data-id="5"
+               style="background-image:url('16_pink.png')"></div>
+          <div class="phone-img" data-id="6"
+               style="background-image:url('17_white.png')"></div>
+          <div class="phone-img" data-id="7"
+               style="background-image:url('air.webp')"></div>
+        </div>
+      </div>
+
+      <button id="spin-btn" class="spin-btn">SPIN</button>
+    </div>
+
+    <div id="card-result" class="card hidden">
+      <div id="result-img" class="result-img"></div>
+      <h2>Congratulations!</h2>
+      <p>You won a new iPhone</p>
+      <button id="claim-btn" class="primary-btn">
+        Get your new iPhone
+      </button>
+    </div>
+
+    <div id="card-form" class="card hidden">
+      <h2>Enter your details</h2>
+      <input id="name" type="text" placeholder="Your name" />
+      <input id="address" type="text" placeholder="Your address" />
+      <button id="submit-btn" class="primary-btn">OK</button>
+    </div>
+
+    <div id="card-countdown" class="card hidden">
+      <h2>You may receive your iPhone soon!</h2>
+      <p id="countdown"></p>
+    </div>
+  </div>
+
+  <script>
+    const spinArea   = document.getElementById("spin-area");
+    const spinBtn    = document.getElementById("spin-btn");
+    const strip      = document.getElementById("phones-strip");
+    const phoneEls   = Array.from(document.querySelectorAll(".phone-img"));
+
+    const mainTitle     = document.getElementById("main-title");
+    const resultCard    = document.getElementById("card-result");
+    const resultImgBox  = document.getElementById("result-img");
+    const claimBtn      = document.getElementById("claim-btn");
+    const formCard      = document.getElementById("card-form");
+    const submitBtn     = document.getElementById("submit-btn");
+    const countdownCard = document.getElementById("card-countdown");
+    const countdownEl   = document.getElementById("countdown");
+    const nameInput     = document.getElementById("name");
+    const addressInput  = document.getElementById("address");
+
+    let offset = 0;
+    let spinInterval;
+    let lastCenteredPhone = null;
+
+    function updateActivePhone(){
+      const frameRect = document.querySelector(".slot-frame").getBoundingClientRect();
+      const frameCenter = frameRect.left + frameRect.width / 2;
+
+      let closest = null;
+      let closestDist = Infinity;
+
+      phoneEls.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const center = rect.left + rect.width / 2;
+        const dist = Math.abs(center - frameCenter);
+        if(dist < closestDist){
+          closestDist = dist;
+          closest = el;
+        }
+      });
+
+      phoneEls.forEach(el => el.classList.remove("active"));
+      if(closest){
+        closest.classList.add("active");
+        lastCenteredPhone = closest;
+      }
+    }
+
+    function measurePhoneWidth(){
+      const first = phoneEls[0].getBoundingClientRect();
+      const second = phoneEls[1].getBoundingClientRect();
+      return second.left - first.left;  // width + gap
+    }
+    const stepWidth = measurePhoneWidth();
+
+    spinBtn.addEventListener("click", () => {
+      spinBtn.disabled = true;
+      spinBtn.textContent = "SPINNING...";
+
+      let steps = 0;
+      const maxSteps = 120;   // many cycles through the center
+
+      spinInterval = setInterval(() => {
+        offset -= 20;  // fast roulette-like movement
+        strip.style.transform = `translate(${offset}px, -50%)`;
+        updateActivePhone();
+
+        if(Math.abs(offset) >= stepWidth){
+          strip.appendChild(strip.firstElementChild);
+          offset += stepWidth;
+          strip.style.transform = `translate(${offset}px, -50%)`;
+        }
+
+        steps++;
+        if(steps >= maxSteps){
+          clearInterval(spinInterval);
+
+          updateActivePhone();
+          const winner = lastCenteredPhone || phoneEls[0];
+          const bgImg = getComputedStyle(winner).backgroundImage;
+          resultImgBox.style.backgroundImage = bgImg;
+
+          mainTitle.style.display = "none";
+          spinArea.remove();
+          resultCard.classList.remove("hidden");
+        }
+      }, 25); // very quick interval → roulette feel[web:167][web:178]
+    });
+
+    claimBtn.addEventListener("click", () => {
+      resultCard.classList.add("hidden");
+      formCard.classList.remove("hidden");
+    });
+
+    submitBtn.addEventListener("click", () => {
+      if (!nameInput.value.trim() || !addressInput.value.trim()) return;
+
+      formCard.classList.add("hidden");
+      countdownCard.classList.remove("hidden");
+      startCountdown(2 * 24 * 60 * 60); // 2 days[web:123]
+    });
+
+    function startCountdown(totalSeconds){
+      function update(){
+        const d = Math.floor(totalSeconds / (24*3600));
+        const h = Math.floor((totalSeconds % (24*3600)) / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+
+        countdownEl.textContent =
+          String(d).padStart(2,"0")+"d "+
+          String(h).padStart(2,"0")+"h "+
+          String(m).padStart(2,"0")+"m "+
+          String(s).padStart(2,"0")+"s";
+
+        if(totalSeconds>0){
+          totalSeconds--;
+          setTimeout(update,1000);
+        }
+      }
+      update();
+    }
+  </script>
+</body>
+</html>
