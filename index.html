@@ -1,290 +1,506 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>iPhone Spin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-}
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#02052b;
-  color:#fff;
-  padding:16px;
-}
-.app{
-  width:100%;
-  max-width:420px;
-}
-.title{
-  text-align:center;
-  margin-bottom:24px;
-  letter-spacing:2px;
-}
-.spin-area{
-  background:#151c4b;
-  border-radius:24px;
-  padding:24px 16px 32px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.track{
-  position:relative;
-  width:100%;
-  height:190px;
-  overflow:hidden;
-  margin-bottom:18px;
-}
-.slot-frame{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:160px;
-  height:190px;
-  transform:translate(-50%,-50%);
-  border:4px solid #19e26b;
-  border-radius:20px;
-  z-index:2;
-  pointer-events:none;
-}
-.phones-strip{
-  position:absolute;
-  left:0;
-  top:50%;
-  display:flex;
-  align-items:center;
-  gap:24px;
-  transform:translateY(-50%);
-}
-.phone-img{
-  width:120px;
-  height:190px;
-  border-radius:18px;
-  background-size:cover;
-  background-position:center;
-  flex-shrink:0;
-  opacity:.35;
-  transition:.1s;
-}
-.phone-img.active{
-  opacity:1;
-  transform:scale(1.05);
-}
-.spin-btn{
-  border:none;
-  border-radius:999px;
-  padding:12px 30px;
-  background:#28e08c;
-  color:#000;
-  font-weight:600;
-  cursor:pointer;
-  width:100%;
-  max-width:240px;
-}
-.card{
-  margin-top:20px;
-  padding:26px;
-  border-radius:24px;
-  background:#151c4b;
-  text-align:center;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.card input{
-  width:100%;
-  margin:10px 0;
-  padding:14px;
-  border-radius:12px;
-  border:none;
-}
-.primary-btn{
-  border:none;
-  border-radius:999px;
-  padding:13px 28px;
-  background:#28e08c;
-  color:#000;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:10px;
-}
-.result-img{
-  width:160px;
-  height:240px;
-  margin-bottom:14px;
-  border-radius:20px;
-  background-size:cover;
-}
-.hidden{display:none}
-
-/* CHECK */
-.checkmark{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  border:4px solid #19e26b;
-  position:relative;
-  margin-bottom:16px;
-  animation:pop .4s ease;
-}
-.checkmark::after{
-  content:"";
-  position:absolute;
-  left:32px;
-  top:55px;
-  width:30px;
-  height:15px;
-  border-left:4px solid #19e26b;
-  border-bottom:4px solid #19e26b;
-  transform:rotate(-45deg);
-  animation:draw .4s .2s forwards;
-  opacity:0;
-}
-@keyframes pop{
-  from{transform:scale(.6);opacity:0;}
-  to{transform:scale(1);opacity:1;}
-}
-@keyframes draw{
-  to{opacity:1;}
-}
-</style>
+    <meta charset="UTF-8">
+    <title>iPhone Spin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #02052b 0%, #0a0f4a 50%, #000 100%);
+            background-size: 200% 200%;
+            animation: cosmicShift 20s ease infinite;
+            color: #fff;
+            padding: 16px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        @keyframes cosmicShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent);
+            background-repeat: repeat;
+            background-size: 100px 100px;
+            animation: starsTwinkle 50s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        @keyframes starsTwinkle {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-100px); }
+        }
+        .app {
+            width: 100%;
+            max-width: 420px;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 2.2em;
+            text-shadow: 0 0 20px rgba(43, 255, 159, 0.5);
+            animation: glowTitle 2s ease-in-out infinite alternate;
+        }
+        @keyframes glowTitle {
+            from { text-shadow: 0 0 20px rgba(43, 255, 159, 0.5); }
+            to { text-shadow: 0 0 30px rgba(43, 255, 159, 0.8), 0 0 40px rgba(43, 255, 159, 0.4); }
+        }
+        .spin-area {
+            background: rgba(18, 25, 74, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 28px 16px 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(43, 255, 159, 0.3);
+        }
+        .track {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: radial-gradient(circle at center, rgba(43,255,159,0.1) 0%, transparent 70%);
+        }
+        .slot-frame {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 170px;
+            height: 200px;
+            transform: translate(-50%, -50%);
+            border: 3px solid #2bff9f;
+            border-radius: 22px;
+            z-index: 2;
+            box-shadow: 0 0 30px rgba(43, 255, 159, 0.6);
+            animation: frameGlow 2s ease-in-out infinite alternate;
+        }
+        @keyframes frameGlow {
+            from { box-shadow: 0 0 30px rgba(43, 255, 159, 0.6); }
+            to { box-shadow: 0 0 40px rgba(43, 255, 159, 0.9), inset 0 0 20px rgba(43, 255, 159, 0.2); }
+        }
+        .phones-strip {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            transform: translateY(-50%);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .phone-img {
+            width: 130px;
+            height: 200px;
+            border-radius: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+            opacity: 0.35;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+        }
+        .phone-img.active,
+        .phone-img:hover {
+            opacity: 1;
+            transform: scale(1.08);
+            filter: drop-shadow(0 10px 30px rgba(43, 255, 159, 0.7)) brightness(1.1);
+        }
+        .spin-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 14px 30px;
+            background: linear-gradient(45deg, #2bff9f, #00f5d4);
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            max-width: 240px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(43, 255, 159, 0.4);
+        }
+        .spin-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(43, 255, 159, 0.6);
+        }
+        .spin-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .card {
+            margin-top: 20px;
+            padding: 26px;
+            border-radius: 26px;
+            background: rgba(18, 25, 74, 0.9);
+            backdrop-filter: blur(20px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            border: 1px solid rgba(43, 255, 159, 0.3);
+            transition: all 0.4s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(43, 255, 159, 0.3);
+        }
+        .card input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .card input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        .card input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(43, 255, 159, 0.5);
+            transform: scale(1.02);
+        }
+        .primary-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 14px 28px;
+            background: linear-gradient(45deg, #2bff9f, #00f5d4);
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(43, 255, 159, 0.4);
+            margin-top: 10px;
+        }
+        .primary-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(43, 255, 159, 0.6);
+        }
+        .result-wrapper {
+            position: relative;
+            width: 220px;
+            height: 260px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .result-img {
+            width: 140px;
+            height: 220px;
+            border-radius: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.7));
+            position: absolute;
+            top: -260px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: phoneDrop 1s ease-out forwards;
+        }
+        .result-box {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 80px;
+            border-radius: 24px 24px 18px 18px;
+            background: radial-gradient(circle at top, rgba(43,255,159,0.25), rgba(9, 15, 60, 0.95));
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 25px rgba(43,255,159,0.4);
+            border: 1px solid rgba(43,255,159,0.6);
+            overflow: hidden;
+        }
+        .result-box::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: inherit;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 30px rgba(43,255,159,0.5);
+        }
+        .result-shadow {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 24px;
+            background: radial-gradient(circle, rgba(0,0,0,0.8), transparent 70%);
+            opacity: 0;
+            animation: shadowAppear 1s ease-out forwards;
+        }
+        @keyframes shadowAppear {
+            0% { opacity: 0; transform: translateX(-50%) scaleX(0.4); }
+            100% { opacity: 1; transform: translateX(-50%) scaleX(1); }
+        }
+        @keyframes phoneDrop {
+            0% { top: -260px; }
+            70% { top: -40px; }
+            85% { top: -60px; }
+            100% { top: -50px; }
+        }
+        .hidden {
+            display: none;
+        }
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .success-img {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 12px rgba(43,255,159,0.6));
+            animation: pop 0.35s ease, pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(43,255,159,0.6)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(43,255,159,1)); }
+        }
+        .checkmark {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .checkmark::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            background: #12194a;
+        }
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 52px;
+            width: 50px;
+            height: 26px;
+            border-left: 6px solid #2bff9f;
+            border-bottom: 6px solid #2bff9f;
+            transform: rotate(-45deg) scale(0.9);
+            transform-origin: left bottom;
+            opacity: 0;
+            filter: drop-shadow(0 0 8px rgba(43,255,159,0.9));
+            animation: draw 0.35s 0.2s forwards ease-out;
+        }
+        @keyframes pop {
+            from { transform: scale(0.6); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes draw {
+            from { opacity: 0; transform: rotate(-45deg) scale(0.6); }
+            to { opacity: 1; transform: rotate(-45deg) scale(1); }
+        }
+    </style>
 </head>
-
 <body>
-<div class="app">
-
-<h1 class="title" id="main-title">IPHONE SPIN</h1>
-
-<div id="spin-area" class="spin-area">
-  <div class="track">
-    <div class="slot-frame"></div>
-
-    <div id="phones-strip" class="phones-strip">
-      <div class="phone-img" style="background-image:url('15_blue.webp')"></div>
-      <div class="phone-img" style="background-image:url('16_black.png')"></div>
-      <div class="phone-img" style="background-image:url('17_blue.png')"></div>
-      <div class="phone-img" style="background-image:url('17_orange.png')"></div>
-      <div class="phone-img" style="background-image:url('16_pink.png')"></div>
-      <div class="phone-img" style="background-image:url('17_white.png')"></div>
-
-      <!-- duplicate -->
-      <div class="phone-img" style="background-image:url('15_blue.webp')"></div>
-      <div class="phone-img" style="background-image:url('16_black.png')"></div>
-      <div class="phone-img" style="background-image:url('17_blue.png')"></div>
-      <div class="phone-img" style="background-image:url('17_orange.png')"></div>
-      <div class="phone-img" style="background-image:url('16_pink.png')"></div>
-      <div class="phone-img" style="background-image:url('17_white.png')"></div>
+    <div class="app">
+        <h1 class="title" id="main-title">IPHONE SPIN</h1>
+        <div id="spin-area" class="spin-area">
+            <div class="track">
+                <div class="slot-frame"></div>
+                <div id="phones-strip" class="phones-strip">
+                    <div class="phone-img" style="background-image: url('15blue.webp')"></div>
+                    <div class="phone-img" style="background-image: url('16black.png')"></div>
+                    <div class="phone-img" style="background-image: url('17blue.png')"></div>
+                    <div class="phone-img" style="background-image: url('17orange.png')"></div>
+                    <div class="phone-img" style="background-image: url('16pink.png')"></div>
+                    <div class="phone-img" style="background-image: url('17white.png')"></div>
+                    <div class="phone-img" style="background-image: url('15blue.webp')"></div>
+                    <div class="phone-img" style="background-image: url('16black.png')"></div>
+                    <div class="phone-img" style="background-image: url('17blue.png')"></div>
+                    <div class="phone-img" style="background-image: url('17orange.png')"></div>
+                    <div class="phone-img" style="background-image: url('16pink.png')"></div>
+                    <div class="phone-img" style="background-image: url('17white.png')"></div>
+                </div>
+            </div>
+            <button id="spin-btn" class="spin-btn">SPIN</button>
+        </div>
+        <div id="card-result" class="card hidden">
+            <div class="result-wrapper">
+                <div class="result-img" id="result-img"></div>
+                <div class="result-box"></div>
+                <div class="result-shadow"></div>
+            </div>
+            <button id="claim-btn" class="primary-btn">Continue</button>
+        </div>
+        <div id="card-form" class="card hidden">
+            <h2>Enter details</h2>
+            <input id="name" placeholder="Name">
+            <input id="address" placeholder="Address">
+            <button id="submit-btn" class="primary-btn">OK</button>
+        </div>
+        <div id="card-success" class="card hidden">
+            <img src="check.svg.webp" class="success-img" alt="success">
+        </div>
     </div>
-  </div>
+    <canvas id="confetti-canvas"></canvas>
+    <script>
+        const strip = document.getElementById('phones-strip');
+        const phones = Array.from(document.querySelectorAll('.phone-img'));
+        const spinBtn = document.getElementById('spin-btn');
+        const resultCard = document.getElementById('card-result');
+        const resultImg = document.getElementById('result-img');
+        const claimBtn = document.getElementById('claim-btn');
+        const formCard = document.getElementById('card-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const successCard = document.getElementById('card-success');
 
-  <button id="spin-btn" class="spin-btn">SPIN</button>
-</div>
+        let offset = 0;
+        let lastCentered;
 
-<!-- RESULT -->
-<div id="card-result" class="card hidden">
-  <div id="result-img" class="result-img"></div>
-  <h2>Congratulations!</h2>
-  <button id="claim-btn" class="primary-btn">Continue</button>
-</div>
+        function updateActive() {
+            let center = window.innerWidth / 2;
+            let closest = null, dist = 9999;
+            phones.forEach(el => {
+                let r = el.getBoundingClientRect();
+                let cr = r.left + r.width / 2;
+                let d = Math.abs(center - cr);
+                if (d < dist) {
+                    dist = d;
+                    closest = el;
+                }
+            });
+            phones.forEach(e => e.classList.remove('active'));
+            if (closest) closest.classList.add('active');
+            lastCentered = closest;
+        }
 
-<!-- FORM -->
-<div id="card-form" class="card hidden">
-  <h2>Enter details</h2>
-  <input id="name" placeholder="Name">
-  <input id="address" placeholder="Address">
-  <button id="submit-btn" class="primary-btn">OK</button>
-</div>
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-<!-- SUCCESS -->
-<div id="card-success" class="card hidden">
-  <div class="checkmark"></div>
-  <h2>Success!</h2>
-</div>
+        function createParticle() {
+            const colors = ['#2bff9f', '#00f5d4', '#ffeb3b', '#ff9800', '#e91e63', '#9c27b0'];
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                vx: (Math.random() - 0.5) * 10,
+                vy: Math.random() * 5 + 5,
+                size: Math.random() * 6 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                rotation: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 10,
+                life: 1,
+                decay: Math.random() * 0.01 + 0.005
+            };
+        }
 
-</div>
+        function startConfetti() {
+            particles = [];
+            for (let i = 0; i < 220; i++) {
+                particles.push(createParticle());
+            }
+            const animate = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.2;
+                    p.vx *= 0.99;
+                    p.rotation += p.rotSpeed;
+                    p.life -= p.decay;
+                    if (p.life <= 0) {
+                        particles.splice(i, 1);
+                        return;
+                    }
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.globalAlpha = p.life;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                });
+                if (particles.length > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            };
+            animate();
+        }
 
-<script>
-const strip = document.getElementById("phones-strip");
-const phones = Array.from(document.querySelectorAll(".phone-img"));
-const spinBtn = document.getElementById("spin-btn");
+        spinBtn.onclick = () => {
+            spinBtn.disabled = true;
+            let steps = 0;
+            let interval = setInterval(() => {
+                offset -= 20;
+                strip.style.transform = `translate(${offset}px, -50%)`;
+                updateActive();
+                if (Math.abs(offset) >= 150) {
+                    strip.appendChild(strip.firstElementChild);
+                    offset += 150;
+                    steps++;
+                }
+                if (steps >= 12) {
+                    clearInterval(interval);
+                    let win = lastCentered;
+                    resultImg.style.backgroundImage = getComputedStyle(win).backgroundImage;
+                    document.getElementById('spin-area').remove();
+                    resultCard.classList.remove('hidden');
+                    setTimeout(updateActive, 250);
+                    spinBtn.disabled = false;
+                }
+            }, 25);
+        };
 
-const resultCard = document.getElementById("card-result");
-const resultImg = document.getElementById("result-img");
-const claimBtn = document.getElementById("claim-btn");
+        claimBtn.onclick = () => {
+            resultCard.classList.add('hidden');
+            formCard.classList.remove('hidden');
+        };
 
-const formCard = document.getElementById("card-form");
-const submitBtn = document.getElementById("submit-btn");
+        submitBtn.onclick = () => {
+            formCard.classList.add('hidden');
+            successCard.classList.remove('hidden');
+            startConfetti();
+        };
 
-const successCard = document.getElementById("card-success");
-
-let offset = 0;
-let lastCentered;
-
-function updateActive(){
-  let center = window.innerWidth/2;
-  let closest=null,dist=9999;
-
-  phones.forEach(el=>{
-    let r=el.getBoundingClientRect();
-    let c=r.left+r.width/2;
-    let d=Math.abs(c-center);
-    if(d<dist){dist=d;closest=el;}
-  });
-
-  phones.forEach(e=>e.classList.remove("active"));
-  if(closest){
-    closest.classList.add("active");
-    lastCentered=closest;
-  }
-}
-
-spinBtn.onclick=()=>{
-  spinBtn.disabled=true;
-
-  let steps=0;
-  let interval=setInterval(()=>{
-    offset-=20;
-    strip.style.transform=`translate(${offset}px,-50%)`;
-    updateActive();
-
-    if(Math.abs(offset)>150){
-      strip.appendChild(strip.firstElementChild);
-      offset+=150;
-    }
-
-    steps++;
-    if(steps>120){
-      clearInterval(interval);
-
-      let win=lastCentered;
-      resultImg.style.backgroundImage=getComputedStyle(win).backgroundImage;
-
-      document.getElementById("spin-area").remove();
-      resultCard.classList.remove("hidden");
-    }
-  },25);
-};
-
-claimBtn.onclick=()=>{
-  resultCard.classList.add("hidden");
-  formCard.classList.remove("hidden");
-};
-
-submitBtn.onclick=()=>{
-  formCard.classList.add("hidden");
-  successCard.classList.remove("hidden");
-};
-</script>
-
+        updateActive();
+    </script>
 </body>
 </html>
