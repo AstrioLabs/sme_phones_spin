@@ -1,8 +1,17 @@
+Here’s your **full fixed HTML/CSS/JS** with:
+
+- **no box/frame around the result phone** (only the phone image),  
+- **larger phone on the result screen**,  
+- **smoother spin animation**.
+
+***
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>iPhone Spin</title>
+    <title>APPLES</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * {
@@ -111,7 +120,7 @@
             align-items: center;
             gap: 24px;
             transform: translateY(-50%);
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.2s cubic-bezier(0.3, 0.7, 0.4, 1);
         }
         .phone-img {
             width: 130px;
@@ -129,7 +138,7 @@
         .phone-img:hover {
             opacity: 1;
             transform: scale(1.08);
-            filter: drop-shadow(0 10px 30px rgba(43, 255, 159, 0.7)) brightness(1.1);
+            filter: drop-shadow(0 10px 30px rgba(43,255,159,0.7)) brightness(1.1);
         }
         .spin-btn {
             border: none;
@@ -143,11 +152,11 @@
             max-width: 240px;
             font-size: 1.1em;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(43, 255, 159, 0.4);
+            box-shadow: 0 10px 30px rgba(43,255,159,0.4);
         }
         .spin-btn:hover:not(:disabled) {
             transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(43, 255, 159, 0.6);
+            box-shadow: 0 15px 40px rgba(43,255,159,0.6);
         }
         .spin-btn:disabled {
             opacity: 0.7;
@@ -164,12 +173,12 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-            border: 1px solid rgba(43, 255, 159, 0.3);
+            border: 1px solid rgba(43,255,159,0.3);
             transition: all 0.4s ease;
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(43, 255, 159, 0.3);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(43,255,159,0.3);
         }
         .card input {
             width: 100%;
@@ -188,7 +197,7 @@
         .card input:focus {
             outline: none;
             background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 20px rgba(43, 255, 159, 0.5);
+            box-shadow: 0 0 20px rgba(43,255,159,0.5);
             transform: scale(1.02);
         }
         .primary-btn {
@@ -200,77 +209,45 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(43, 255, 159, 0.4);
+            box-shadow: 0 10px 30px rgba(43,255,159,0.4);
             margin-top: 10px;
         }
         .primary-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(43, 255, 159, 0.6);
+            box-shadow: 0 15px 40px rgba(43,255,159,0.6);
         }
+
+        /* Result without box, larger phone */
         .result-wrapper {
             position: relative;
-            width: 220px;
-            height: 260px;
+            width: 240px;
+            height: 280px;
             display: flex;
             align-items: flex-start;
             justify-content: center;
         }
         .result-img {
-            width: 140px;
-            height: 220px;
-            border-radius: 20px;
+            width: 180px;
+            height: 260px;
+            border-radius: 24px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             filter: drop-shadow(0 10px 30px rgba(0,0,0,0.7));
             position: absolute;
-            top: -260px;
+            top: -280px;
             left: 50%;
             transform: translateX(-50%);
             animation: phoneDrop 1s ease-out forwards;
         }
-        .result-box {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 80px;
-            border-radius: 24px 24px 18px 18px;
-            background: radial-gradient(circle at top, rgba(43,255,159,0.25), rgba(9, 15, 60, 0.95));
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 25px rgba(43,255,159,0.4);
-            border: 1px solid rgba(43,255,159,0.6);
-            overflow: hidden;
-        }
-        .result-box::before {
-            content: '';
-            position: absolute;
-            inset: 6px;
-            border-radius: inherit;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 0 30px rgba(43,255,159,0.5);
-        }
-        .result-shadow {
-            position: absolute;
-            bottom: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 24px;
-            background: radial-gradient(circle, rgba(0,0,0,0.8), transparent 70%);
-            opacity: 0;
-            animation: shadowAppear 1s ease-out forwards;
-        }
-        @keyframes shadowAppear {
-            0% { opacity: 0; transform: translateX(-50%) scaleX(0.4); }
-            100% { opacity: 1; transform: translateX(-50%) scaleX(1); }
-        }
+
         @keyframes phoneDrop {
-            0% { top: -260px; }
-            70% { top: -40px; }
+            0% { top: -280px; }
+            70% { top: -50px; }
             85% { top: -60px; }
             100% { top: -50px; }
         }
+
         .hidden {
             display: none;
         }
@@ -357,8 +334,6 @@
         <div id="card-result" class="card hidden">
             <div class="result-wrapper">
                 <div class="result-img" id="result-img"></div>
-                <div class="result-box"></div>
-                <div class="result-shadow"></div>
             </div>
             <button id="claim-btn" class="primary-btn">Continue</button>
         </div>
@@ -419,88 +394,4 @@
             return {
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height - canvas.height,
-                vx: (Math.random() - 0.5) * 10,
-                vy: Math.random() * 5 + 5,
-                size: Math.random() * 6 + 3,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                rotation: Math.random() * 360,
-                rotSpeed: (Math.random() - 0.5) * 10,
-                life: 1,
-                decay: Math.random() * 0.01 + 0.005
-            };
-        }
-
-        function startConfetti() {
-            particles = [];
-            for (let i = 0; i < 220; i++) {
-                particles.push(createParticle());
-            }
-            const animate = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach((p, i) => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.vy += 0.2;
-                    p.vx *= 0.99;
-                    p.rotation += p.rotSpeed;
-                    p.life -= p.decay;
-                    if (p.life <= 0) {
-                        particles.splice(i, 1);
-                        return;
-                    }
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.rotation * Math.PI / 180);
-                    ctx.globalAlpha = p.life;
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-                    ctx.restore();
-                });
-                if (particles.length > 0) {
-                    requestAnimationFrame(animate);
-                } else {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                }
-            };
-            animate();
-        }
-
-        spinBtn.onclick = () => {
-            spinBtn.disabled = true;
-            let steps = 0;
-            let interval = setInterval(() => {
-                offset -= 20;
-                strip.style.transform = `translate(${offset}px, -50%)`;
-                updateActive();
-                if (Math.abs(offset) >= 150) {
-                    strip.appendChild(strip.firstElementChild);
-                    offset += 150;
-                    steps++;
-                }
-                if (steps >= 12) {
-                    clearInterval(interval);
-                    let win = lastCentered;
-                    resultImg.style.backgroundImage = getComputedStyle(win).backgroundImage;
-                    document.getElementById('spin-area').remove();
-                    resultCard.classList.remove('hidden');
-                    setTimeout(updateActive, 250);
-                    spinBtn.disabled = false;
-                }
-            }, 25);
-        };
-
-        claimBtn.onclick = () => {
-            resultCard.classList.add('hidden');
-            formCard.classList.remove('hidden');
-        };
-
-        submitBtn.onclick = () => {
-            formCard.classList.add('hidden');
-            successCard.classList.remove('hidden');
-            startConfetti();
-        };
-
-        updateActive();
-    </script>
-</body>
-</html>
+                vx: (Math.random() - 0
